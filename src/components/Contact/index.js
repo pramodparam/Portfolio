@@ -49,11 +49,21 @@ const Desc = styled.div`
     max-width: 600px;
     color: ${({ theme }) => theme.text_secondary};
     @media (max-width: 768px) {
-        margin-top: 12px;
+        margin-top: 5px;
         font-size: 16px;
     }
 `;
-
+const Desc1 = styled.div`
+    font-size: 20px;
+    text-align: center;
+    max-width: 600px;
+    font-weight: 600;
+    color: ${({ theme }) => theme.text_secondary};
+    @media (max-width: 768px) {
+        margin-top: 5px;
+        font-size: 16px;
+    }
+`;
 
 const ContactForm = styled.form`
   width: 95%;
@@ -130,17 +140,22 @@ const Contact = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
- 
-        emailjs.sendForm('gmail', 'template_z2wsmqk', form.current,'I369jGAHngFX3gI2k')
-        .then((result) => {
-          setOpen(true);
-          form.current.reset();
-        }, (error) => {
-          console.log(error.text);
-        });
-      
-    
-   
+
+    emailjs.sendForm('gmail', 'template_z2wsmqk', form.current, 'I369jGAHngFX3gI2k', {
+      from_email: form.current.from_email.value,
+      from_name: form.current.from_name.value,
+      subject: form.current.subject.value,
+      message: form.current.message.value
+    })
+      .then((result) => {
+        setOpen(true);
+        form.current.reset();
+      }, (error) => {
+        console.log(error.text);
+      });
+
+
+
   }
 
 
@@ -149,7 +164,8 @@ const Contact = () => {
     <Container>
       <Wrapper>
         <Title>Contact</Title>
-        <Desc>Feel free to reach out to me for any questions or opportunities!</Desc>
+        <Desc1>Lets work together!</Desc1>
+        <Desc> Feel free to reach out to me for any questions or opportunities!</Desc>
         <ContactForm ref={form} onSubmit={handleSubmit}>
           <ContactTitle>Email Me 🚀</ContactTitle>
           <ContactInput placeholder="Your Email" name="from_email" />
@@ -161,7 +177,7 @@ const Contact = () => {
         <Snackbar
           open={open}
           autoHideDuration={6000}
-          onClose={()=>setOpen(false)}
+          onClose={() => setOpen(false)}
           message="Email sent successfully!"
           severity="success"
         />
